@@ -45,7 +45,7 @@ class {{{classname}}} {
     {{^isBinary}}
     @JsonKey(
       {{#defaultValue}}defaultValue: {{{defaultValue}}},{{/defaultValue}}
-      name: r'{{{name}}}',
+      name: r'{{{complexType}}}',
       required: {{#required}}true{{/required}}{{^required}}false{{/required}},
       includeIfNull: true,//{{#required}}{{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}}{{/required}}{{^required}}false{{/required}},
     {{#isEnumOrRef}}
@@ -61,10 +61,10 @@ class {{{classname}}} {
 
 
     {{#required}}
-    {{#finalProperties}}final {{/finalProperties}}{{{datatypeWithEnum}}}{{#isNullable}}?{{/isNullable}} {{{name}}};
+    {{#finalProperties}}final {{/finalProperties}}{{{datatypeWithEnum}}}{{#isNullable}}?{{/isNullable}} {{{complexType}}};
     {{/required}}
     {{^required}}
-    {{#finalProperties}}final {{/finalProperties}}{{{datatypeWithEnum}}}? {{{name}}};
+    {{#finalProperties}}final {{/finalProperties}}{{{datatypeWithEnum}}}? {{{complexType}}};
     {{/required}}
 
     {{/anyOf}}
@@ -166,7 +166,7 @@ class {{{classname}}} {
       {{#model}}
       {{#composedSchemas}}
         {{#anyOf}}
-          {{#isNullable}}({{{name}}} == null ? 0 : {{{name}}}.hashCode){{/isNullable}}{{^isNullable}}{{{name}}}.hashCode{{/isNullable}}{{^-last}} +{{/-last}}{{#-last}};{{/-last}}
+          {{#isNullable}}({{{complexType}}} == null ? 0 : {{{complexType}}}.hashCode){{/isNullable}}{{^isNullable}}{{{complexType}}}.hashCode{{/isNullable}}{{^-last}} +{{/-last}}{{#-last}};{{/-last}}
         {{/anyOf}}
       {{/composedSchemas}}
     {{/model}}
