@@ -143,7 +143,7 @@ class {{{classname}}} {
     {{#model}}
       {{#composedSchemas}}
         {{#anyOf}}
-          other.{{{name}}} == {{{name}}}{{^-last}} &&{{/-last}}{{#-last}};{{/-last}}
+          other.{{{complexType}}} == {{{complexType}}}{{^-last}} &&{{/-last}}{{#-last}};{{/-last}}
         {{/anyOf}}
       {{/composedSchemas}}
     {{/model}}
@@ -153,7 +153,7 @@ class {{{classname}}} {
     @override
     int get hashCode => runtimeType.hashCode ^ mapPropsToHashCode([
     {{#vars}}
-        {{{complexType}}},
+        {{{name}}},
     {{/vars}}
     ],);
   {{/useEquatable}}
