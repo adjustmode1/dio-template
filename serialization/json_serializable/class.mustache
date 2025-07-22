@@ -153,7 +153,7 @@ class {{{classname}}} {
     @override
     int get hashCode => runtimeType.hashCode ^ mapPropsToHashCode([
     {{#vars}}
-        {{{name}}},
+        {{{complexType}}},
     {{/vars}}
     ],);
   {{/useEquatable}}
