@@ -1,10 +1,15 @@
+//* 3 *//
+
   /// Returns a new [{{{classname}}}] instance.
   {{{classname}}}({
-{{#model.anyOf}}
-  {{{.}}}
-{{/model.anyOf}}
+{{#model}}
+  {{#composedSchemas}}
+    {{#anyOf}}
+      this.{{{name}}},
+    {{/anyOf}}
+  {{/composedSchemas}}
+{{/model}}
   {{#vars}}
-
     {{!
         A field is required in Dart when it is
         required && !defaultValue in OAS

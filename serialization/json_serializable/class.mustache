@@ -4,7 +4,6 @@ import 'package:equatable/src/equatable_utils.dart';
 {{/useEquatable}}
 
 part '{{classFilename}}.g.dart';
-//* ff111 *//
 {{!
     Classes with polymorphism or composition may generate unused imports,
     these need to be ignored for said classes so that there are no lint errors.
@@ -26,6 +25,51 @@ part '{{classFilename}}.g.dart';
 class {{{classname}}} {
 {{>serialization/json_serializable/dart_constructor}}
 
+{{#model}}
+  {{#composedSchemas}}
+    {{#anyOf}}
+    {{#description}}
+        /// {{{description}}}
+    {{/description}}
+    {{^isEnum}}
+        {{#minimum}}
+            // minimum: {{{minimum}}}
+        {{/minimum}}
+        {{#maximum}}
+            // maximum: {{{maximum}}}
+        {{/maximum}}
+    {{/isEnum}}
+    {{#deprecated}}
+    @Deprecated('{{{name}}} has been deprecated')
+    {{/deprecated}}
+    {{^isBinary}}
+    @JsonKey(
+      {{#defaultValue}}defaultValue: {{{defaultValue}}},{{/defaultValue}}
+      name: r'{{{name}}}',
+      required: {{#required}}true{{/required}}{{^required}}false{{/required}},
+      includeIfNull: true,//{{#required}}{{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}}{{/required}}{{^required}}false{{/required}},
+    {{#isEnumOrRef}}
+    {{#enumUnknownDefaultCase}}
+    unknownEnumValue: {{{datatypeWithEnum}}}.unknownDefaultOpenApi,
+    {{/enumUnknownDefaultCase}}
+    {{/isEnumOrRef}}
+    )
+    {{/isBinary}}
+    {{#isBinary}}
+    @JsonKey(ignore: true)
+    {{/isBinary}}
+
+
+    {{#required}}
+    {{#finalProperties}}final {{/finalProperties}}{{{datatypeWithEnum}}}{{#isNullable}}?{{/isNullable}} {{{name}}};
+    {{/required}}
+    {{^required}}
+    {{#finalProperties}}final {{/finalProperties}}{{{datatypeWithEnum}}}? {{{name}}};
+    {{/required}}
+
+    {{/anyOf}}
+  {{/composedSchemas}}
+{{/model}}
 
 {{#vars}}
   {{#description}}
@@ -68,7 +112,6 @@ class {{{classname}}} {
   {{/required}}
 
 
-
 {{/vars}}
 
   {{#useEquatable}}
@@ -97,6 +140,13 @@ class {{{classname}}} {
     {{#vars}}
       other.{{{name}}} == {{{name}}}{{^-last}} &&{{/-last}}{{#-last}};{{/-last}}
     {{/vars}}
+    {{#model}}
+      {{#composedSchemas}}
+        {{#anyOf}}
+          other.{{{name}}} == {{{name}}}{{^-last}} &&{{/-last}}{{#-last}};{{/-last}}
+        {{/anyOf}}
+      {{/composedSchemas}}
+    {{/model}}
   {{/useEquatable}}
 
   {{#useEquatable}}
@@ -113,6 +163,13 @@ class {{{classname}}} {
     {{#vars}}
         {{#isNullable}}({{{name}}} == null ? 0 : {{{name}}}.hashCode){{/isNullable}}{{^isNullable}}{{{name}}}.hashCode{{/isNullable}}{{^-last}} +{{/-last}}{{#-last}};{{/-last}}
     {{/vars}}
+      {{#model}}
+      {{#composedSchemas}}
+        {{#anyOf}}
+          {{#isNullable}}({{{name}}} == null ? 0 : {{{name}}}.hashCode){{/isNullable}}{{^isNullable}}{{{name}}}.hashCode{{/isNullable}}{{^-last}} +{{/-last}}{{#-last}};{{/-last}}
+        {{/anyOf}}
+      {{/composedSchemas}}
+    {{/model}}
   {{/useEquatable}}
 
   factory {{{classname}}}.fromJson(Map<String, dynamic> json) => _${{{classname}}}FromJson(json);
